@@ -31,6 +31,8 @@ class chatManager {
     }
 
     public async sendMessage (recipientID: string , senderID: string, content: string) {
+         console.log("recipient id is :", recipientID);
+         console.log("sender id is :" , senderID);
             const recipientWS = this.clients.get(recipientID)
             if (!recipientWS) {
                 console.log("reciever not found");
@@ -49,7 +51,7 @@ class chatManager {
            const parsedMessage : Message = JSON.parse(message)
 
            if(parsedMessage.action == "message" && parsedMessage.recipientID && parsedMessage.content && parsedMessage.senderID){
-            this.sendMessage(parsedMessage.senderID, parsedMessage.recipientID, parsedMessage.content);
+            this.sendMessage( parsedMessage.recipientID,parsedMessage.senderID, parsedMessage.content);
            }
            else if(parsedMessage.action == "connect" && parsedMessage.senderID){
             this.connect(parsedMessage.senderID, ws)
