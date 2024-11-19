@@ -13,6 +13,7 @@ export default function Home() {
   const [senderID , setSenderID] = useState<string>("");
   const [content , setContent] = useState<string>("");
   const [GroupID, setGroupID] = useState<string>("");
+  const [hasJoined, setHasJoined] = useState<boolean>(false)
 
 const socket = useSocket();
 
@@ -53,7 +54,7 @@ const socket = useSocket();
     
      
      }
-   }, [socket])
+   }, [socket, msg])
 
 
    //---------------------------joining
@@ -79,7 +80,8 @@ const socket = useSocket();
       console.error("Socket not initialized");
       return;
     }
-
+ 
+    console.log("this is content :", content)
     socket.send(
       JSON.stringify({
         "action": "message-grp",
@@ -96,7 +98,7 @@ const socket = useSocket();
 
 
 
-   if(!senderID || !GroupID) {
+   if(!hasJoined) {
     // input boxes : 2
     //set sender and group id 
     return (
@@ -111,9 +113,12 @@ const socket = useSocket();
 
         <Button onclick={()=> {
              Joingrp(GroupID, senderID);
-        }}></Button>
+             setHasJoined(true);
+        }} placeholder={"join"}></Button>
       </div>
+
     )
+    
    }
 
 
@@ -141,9 +146,11 @@ const socket = useSocket();
    <MessageInput onchange={(e : any)=> {
         setContent(e.target.value)
       }} title={"GroupID"} placeholder={"enter GroupID"}></MessageInput>
-     <Button onclick={()=> {
+
+     <Button placeholder={"send"} onclick={()=> {
+             console.log("pressed button")
              sendMessage(content, senderID, GroupID);
-        }}></Button>
+        } }></Button>
 
 
 
